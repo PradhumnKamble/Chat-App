@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
-const { ErrorMiddleware } = require("./middleware");
+const { ErrorMiddleware } = require("./middlewares");
 const path = require("path");
 
 dotenv.config(); // LOADS ENV vairables and  process.env gets user env variables 
