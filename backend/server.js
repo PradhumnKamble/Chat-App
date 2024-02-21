@@ -7,8 +7,8 @@ const messageRoutes = require("./routes/messageRoutes");
 const { ErrorMiddleware } = require("./middleware");
 const path = require("path");
 
+dotenv.config(); // LOADS ENV vairables and  process.env gets user env variables 
 connectDB();
-dotenv.config();
 const app = express();
 
 app.use(express.json()); // to accept json data
