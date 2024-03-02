@@ -20,7 +20,7 @@ const allUsers = asyncHandler(async (userId , query) => {
 
   return users;
 });
-``
+
 
 //@description     Register new user
 //@route           POST /api/user/
