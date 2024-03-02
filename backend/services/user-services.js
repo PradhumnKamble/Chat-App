@@ -21,6 +21,20 @@ const allUsers = asyncHandler(async (userId , query) => {
   return users;
 });
 
+// @description     Get contacts
+// @route           GET /api/user/:id/contacts
+// @access          Public
+const getContacts =  asyncHandler( async (userId)=>{
+    try {
+      const contactsInfo = await User.findById(userId,'contacts')
+                                  .populate("contacts" , "name email") ; 
+      return contactsInfo ;
+    } catch(error) {
+      console.log(error);
+      throw Error("Something Went Wrong") ;
+    }
+})
+
 
 //@description     Register new user
 //@route           POST /api/user/
@@ -83,4 +97,4 @@ const authUser = asyncHandler(async (data) => {
   }
 });
 
-module.exports = { allUsers,registerUser, authUser};
+module.exports = { allUsers,registerUser, authUser,getContacts};
