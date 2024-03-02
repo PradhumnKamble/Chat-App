@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema(
       default:
         "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
     },
-    contacts:[ { type: mongoose.Schema.Types.ObjectId, ref: "User" ,unique: true}],
+    contacts:[ { type: mongoose.Schema.Types.ObjectId, ref: "User"}],
     isAdmin: {
       type: Boolean,
       required: true,

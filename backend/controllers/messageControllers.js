@@ -30,6 +30,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
   try{
     const message = await MessageService.sendMessage(req.user._id , req.body) ;
+    console.log("message",message)
     res.status(201).json(message);
   } catch (error) {
     res.status(400);
