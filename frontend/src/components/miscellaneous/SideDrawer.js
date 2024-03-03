@@ -36,6 +36,7 @@ import { getSender } from "../../config/ChatLogics";
 import UserListItem from "../userAvatar/UserListItem";
 import { ChatState } from "../../Context/ChatProvider";
 import MyChats from "../MyChats";
+import {useEffect} from 'react'
 
 import icon from '../../images/icon.svg'
  
@@ -44,9 +45,15 @@ function SideDrawer() {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-  const [contactsResult,setcontactsResult] = useState([{}]);
-  const [MyContacts,setMyContacts] = useState(false);
+  const [myContacts,setMyContacts] = useState([]);
  
+  // useEffect(() => {
+  //   getContacts();
+  //   // eslint-disable-next-line
+  // }, [myContacts]);
+
+
+
   const {
     setSelectedChat,
     user,setUser,
@@ -54,18 +61,23 @@ function SideDrawer() {
     setNotification,
     chats,
     setChats,
-    token,setToken,contacts, setContacts
+    token,setToken
   } = ChatState();
 
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+   const { 
+      isOpen: isContactPanelOpen, 
+      onOpen: onOpenContactPanel, 
+      onClose: onCloseContactPanel
+    } = useDisclosure()
+
   const history = useHistory();
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
     history.push("/");
   };
-
   const handleSearch = async () => {
     if (!search) {
       toast({
@@ -102,6 +114,30 @@ function SideDrawer() {
     }
   };
 
+  const getContacts = async ()=>{
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        const {data} = await axios.get(`/api/user/${user._id}/contacts` ,config) ;
+        setMyContacts(data.contacts) ;
+        console.log(myContacts)
+        
+      } catch(error) {
+        toast({
+        title: "Error fetching the chat",
+        description: error.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom-left",
+      });        
+      }
+  }
+
+
   const accessChat = async (userId) => {
     
 
@@ -119,6 +155,7 @@ function SideDrawer() {
       setSelectedChat(data);
       setLoadingChat(false);
       onClose();
+      onCloseContactPanel();
     } catch (error) {
       toast({
         title: "Error fetching the chat",
@@ -149,12 +186,28 @@ function SideDrawer() {
 
         <div>
 
+
+        <Tooltip label="See Contacts" hasArrow placement="bottom-end">
+          <Button
+            // display="flex"
+            // alignItems="center" 
+            style={{'background-color':"white"}}  
+            onClick={()=>{
+            onOpenContactPanel();
+            getContacts() ;
+          }} >
+            <span ><i class="fa fa-address-book fa-lg" aria-hidden="true"></i></span>
+            <Text ml ={1}>My Contacts</Text>
+          </Button>
+        </Tooltip>
+
+
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button style={{'background-color':"white"}}  onClick={onOpen}>
+            <span>
             <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4}>
-              Search User
-            </Text>
+            </span>
+            <Text ml ={1}>Search User</Text>
           </Button>
         </Tooltip>
         
@@ -213,9 +266,11 @@ function SideDrawer() {
         </div>
       </Box>
 {/*  */}
+      {/*Search user */}
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
+
           <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
           <DrawerBody>
             <Box d="flex" pb={2}>
@@ -232,11 +287,16 @@ function SideDrawer() {
               <ChatLoading />
             ) : (
               searchResult?.map((searcheduser) => (
-                <UserListItem
-                  key={searcheduser._id}
-                  searcheduser={searcheduser}
-                  handleFunction={() => accessChat(searcheduser._id)}
-                />
+                <Box>
+                  <UserListItem
+                    key={searcheduser._id}
+                    searcheduser={searcheduser}
+                    handleFunction={() => accessChat(searcheduser._id)}
+                    belongsToSearch = {true}
+                    myContacts = {myContacts}
+                  />
+                  
+                </Box>
               ))
             )
           }
@@ -244,6 +304,33 @@ function SideDrawer() {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
+
+      {/*Get Contacts */}
+      <Drawer placement="left" onClose={onCloseContactPanel} isOpen={isContactPanelOpen}>
+        <DrawerOverlay />
+        <DrawerContent>
+
+          <DrawerHeader borderBottomWidth="1px">Contacts</DrawerHeader>
+          <DrawerBody>
+            {
+              loading ? (
+              <ChatLoading />
+            ) : (
+              myContacts?.map((con) => (
+                  <UserListItem
+                    key={con._id}
+                    searcheduser={con}
+                    handleFunction={() => accessChat(con._id)}
+                    belongsToSearch = {false}
+                  />
+              ))
+            )
+          }
+            {loadingChat && <Spinner ml="auto" d="flex" />}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+
 
     </>
   );

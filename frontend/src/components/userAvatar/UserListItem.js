@@ -2,29 +2,55 @@ import { Avatar } from "@chakra-ui/avatar";
 import { Box, Text } from "@chakra-ui/layout";
 import { ChatState } from "../../Context/ChatProvider";
 import { Button } from "@chakra-ui/button";
+import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 
-const UserListItem = ({searcheduser, handleFunction }) => {
-  const { user,setUser } = ChatState();
-const addToContacts = async () => {
+const UserListItem = ({searcheduser, handleFunction ,belongsToSearch,myContacts}) => {
+  const {user} = ChatState() ;
+  
+  const toast = useToast();
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-      const {data}  = await axios.put("/api/user/addToContacts",searcheduser, config);
-      console.log(data);
-      setUser(data);
-
+  const addToContacts = async () => {
+      try {
+          if( myContacts.find( (obj) => { 
+              return obj._id === searcheduser._id }) )
+          {
+            throw Error("User has been already added to Contacts");
+          }
+          const config = {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          };
+          const {data}  = await axios.patch(`/api/user/${user._id}/contacts`,
+            {
+              searcheduserId : searcheduser._id
+            }, 
+              config);
+          toast({
+            title: "Added to Contacts",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+            position: "top",
+          });
+      } catch(e) {
+        toast({
+          title: "Error Occured!",
+          description: e.message ? e.message : "Failed to add",
+          status: "error",
+          duration: 4000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
 }
   return (
-    <Box borderWidth="1px" borderRadius="lg" py={2} 
+    <Box borderWidth="1px" borderRadius="lg" mb={4} 
     //     background: "#38B2AC",
     //     color: "white",      }}
         >
     <Box
-      onClick={handleFunction}
       cursor="pointer"
       w="100%"
       // borderWidth="2px"
@@ -35,8 +61,7 @@ const addToContacts = async () => {
       alignItems="center"
       color="black"
       px={3}
-      py={2}
-      mb={2}
+      py={3}
       
       overflowY ="scroll"
     >
@@ -53,7 +78,21 @@ const addToContacts = async () => {
           <b>Email : </b>
           {searcheduser.email}
         </Text>
-      </Box>  </Box>
+      </Box> 
+      <div> </div>
+      <span >
+        <Button colorScheme = 'telegram' onClick = {handleFunction}> Chat</Button>
+        {
+          belongsToSearch ?
+          ( 
+            <Button ml ={4} colorScheme = 'red' onClick = {addToContacts}>Add To Contacts</Button>)
+            :
+          <></>
+        }
+        
+      </span>
+
+      </Box>
 
     </Box>
   );
