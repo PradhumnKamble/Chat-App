@@ -35,6 +35,22 @@ const getContacts =  asyncHandler( async (userId)=>{
     }
 })
 
+// @description     Post contacts
+// @route           POST /api/user/:id/contacts
+// @access          Public
+const addToContacts =  asyncHandler( async (userId , contactId)=>{
+    try {
+      const {contacts} = await User.
+            findByIdAndUpdate(userId,{ $push: { "contacts": contactId }},{new :true})
+              .populate("contacts" , "name email") ; 
+      
+      return contacts ;
+    } catch(error) {
+      console.log(error);
+      throw Error("Something Went Wrong") ;
+    }
+})
+
 
 //@description     Register new user
 //@route           POST /api/user/
@@ -97,4 +113,14 @@ const authUser = asyncHandler(async (data) => {
   }
 });
 
-module.exports = { allUsers,registerUser, authUser,getContacts};
+const getAll = asyncHandler(async ()=>{
+  try {
+    const users = await User.find({},'_id name email') ; 
+    return users ;
+    
+  } catch(e) {
+      console.log(e);
+      throw Error("Something went wrong")
+  }
+})
+module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll};

@@ -30,6 +30,21 @@ const getContacts =  asyncHandler( async (req,res)=>{
     }
 })
 
+// @description     Post contacts
+// @route           POST /api/user/:id/contacts
+// @access          Public
+const addToContacts =  asyncHandler( async (req,res)=>{
+    try {
+      const contactsInfo = await UserService.addToContacts(req.params.id , 
+        req.body.searcheduserId) ; 
+      return res.status(200).json(contactsInfo) ;
+    } catch(error) {
+      res.status(500);
+      throw Error(error.message) ;
+    }
+})
+
+
 //@description     Register new user
 //@route           POST /api/user/
 //@access          Public
@@ -62,4 +77,16 @@ const authUser = asyncHandler(async (req, res) => {
 
 });
 
-module.exports = { allUsers,registerUser, authUser,getContacts};
+
+// get all users
+const getAll = asyncHandler(async (req,res)=>{
+  try {
+    const users = await UserService.getAll() ; 
+    return res.status(200).json(users) ;
+    
+  } catch(e) {
+      res.status(500) ;
+      throw Error(e.message) ;
+  }
+})
+module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll};
