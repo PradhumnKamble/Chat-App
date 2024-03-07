@@ -20,8 +20,9 @@ import {
  FiBell
 } from 'react-icons/fi';
 import {IconButton}from '@chakra-ui/react';
+import GroupChatModal from "./GroupChatModal";
 import { Tooltip } from "@chakra-ui/tooltip";
-import { BellIcon, ChevronDownIcon,ChatIcon } from "@chakra-ui/icons";
+import { BellIcon, ChevronDownIcon,ChatIcon ,AddIcon} from "@chakra-ui/icons";
 import { Avatar } from "@chakra-ui/avatar";
 import { useHistory,Link ,Route} from "react-router-dom";
 import { useState } from "react";
@@ -185,7 +186,14 @@ function SideDrawer() {
         </Text></Box>
 
         <div>
-
+        <Tooltip label="Create an new Group" hasArrow placement="bottom-end">
+            <Button  style={{'background-color':"white"}} > 
+            <span class="fa-solid fa-user-group fa-lg"></span>
+            <GroupChatModal>
+              <Text ml ={1}>Group-Chat</Text>            
+              </GroupChatModal>
+            </Button>
+        </Tooltip>
 
         <Tooltip label="See Contacts" hasArrow placement="bottom-end">
           <Button
@@ -204,9 +212,7 @@ function SideDrawer() {
 
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button style={{'background-color':"white"}}  onClick={onOpen}>
-            <span>
-            <i className="fas fa-search"></i>
-            </span>
+            <span><i className="fas fa-search"></i></span>
             <Text ml ={1}>Search Users</Text>
           </Button>
         </Tooltip>

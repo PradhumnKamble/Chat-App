@@ -1,4 +1,4 @@
-import { ViewIcon } from "@chakra-ui/icons";
+import { ViewIcon,InfoOutlineIcon } from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -237,7 +237,7 @@ const handleLeave = async (user) => {
 };
   return (
     <>
-      <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
+      <InfoOutlineIcon cursor ="pointer" onClick={onOpen} />
 
       <Modal size="md"scrollBehavior="inside" onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />

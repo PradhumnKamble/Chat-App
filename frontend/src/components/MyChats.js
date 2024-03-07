@@ -26,10 +26,19 @@ const MyChats = ({ fetchAgain }) => {
       let hours = date.getHours() ;
       let minutes = date.getMinutes() ;
       let amPm = hours >= 12 ? 'PM' : 'AM' ;
-      hours = hours%12 ; // 12 hr format
+      let rem  = hours%12  ; // 12 hr format
+      hours = (rem === 0) ? 12 : rem ;
       return hours+':'+minutes+' '+ amPm;
     }
-    else return date.toLocaleDateString() ;
+    else{
+      const yyyy = date.getFullYear();
+      let mm = date.getMonth() + 1; // Months start at 0!
+      let dd = date.getDate();
+      if (mm < 10) mm = '0' + mm;
+
+      const formattedDate = dd + '/' + mm + '/' + yyyy;
+      return formattedDate;
+    } 
   }
 
   const fetchChats = async () => {
@@ -90,15 +99,6 @@ const MyChats = ({ fetchAgain }) => {
         flexWrap="wrap"
       >
         My Chats
-        <GroupChatModal>
-          <Button
-            d="flex"
-            fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-            rightIcon={<AddIcon />}
-          >
-          Group Chat
-          </Button>
-        </GroupChatModal>
         {/* <Divider width = {"100%"} borderColor = 'gray' mt = {1}/> */}
       </Box>
       <Box
