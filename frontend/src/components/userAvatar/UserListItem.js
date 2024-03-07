@@ -85,7 +85,7 @@ const UserListItem = ({searcheduser, handleFunction ,belongsToSearch,myContacts}
         {
           belongsToSearch ?
           ( 
-            <Button ml ={4} colorScheme = 'red' onClick = {addToContacts}>Add To Contacts</Button>)
+            <Button ml ={4} colorScheme ='red' onClick = {addToContacts}>Add To Contacts</Button>)
             :
           <></>
         }

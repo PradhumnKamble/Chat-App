@@ -207,7 +207,7 @@ function SideDrawer() {
             <span>
             <i className="fas fa-search"></i>
             </span>
-            <Text ml ={1}>Search User</Text>
+            <Text ml ={1}>Search Users</Text>
           </Button>
         </Tooltip>
         

@@ -62,7 +62,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       );
       setMessages(data);
       setLoading(false);
-      console.log(data);
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
@@ -172,8 +171,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         <>
           <Text
             fontSize={{ base: "28px", md: "30px" }}
-            pb={3}
-            px={2}
+            // pb={3}
+            // px={2}
             w="100%"
             fontFamily="Work sans"
             display="flex"
@@ -182,16 +181,33 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           >
             <IconButton
               d={{ base: "flex", md: "none" }}
+              sx ={{
+                    position:'relative',
+                    marginLeft :"0px"
+                  }}
               icon={<ArrowBackIcon />}
-              onClick={() => setSelectedChat("")}
+              onClick={() => {
+                setSelectedChat("");
+                setFetchAgain(!fetchAgain) ;
+              }}
             />
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
-                  {getSender(user, selectedChat.users)}
+                  <Box sx ={{
+                    position:'relative',
+                    marginLeft :"5px"
+                  }}>
+                  {getSender(user, selectedChat.users)}</Box>
+                  <Box sx ={{
+                    position:'relative',
+                    marginRight :"0px"
+                  }}>
+                    
                   <ProfileModal
                     user={getSenderFull(user, selectedChat.users)}
                   />
+                  </Box>
                 </>
               ) : (
                 <>
@@ -205,7 +221,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ))}
           </Text>
           <Box
-            className =" chatbox"
+            className ="chatbox"
             display="flex"
             flexDir="column"
             justifyContent="flex-end"
@@ -234,7 +250,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               onKeyDown={sendMessage}
               id="first-name"
               isRequired
-              mt={3}
+              mt={2}
 
             >
               {istyping ? (
@@ -255,8 +271,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 placeholder="Enter a message.."
                 value={newMessage}
                 onChange={typingHandler}
-               
-  
+        
               />
 
 
