@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
+const Otp = require("../models/otpModel");
 const generateToken = require("../config/generateToken");
+const mailsender = require("../config/email-config");
 
 // @description     Get or Search all users
 // @route           GET /api/user?search=
@@ -120,7 +122,64 @@ const getAll = asyncHandler(async ()=>{
     
   } catch(e) {
       console.log(e);
-      throw Error("Something went wrong")
+      throw new Error("Something went wrong")
   }
 })
-module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll};
+
+// generate otp
+const generateOtp = (len) =>{
+  return Math.pow(10 ,len-1) + Math.floor(Math.random()*9* Math.pow(10,len-1)) ;
+}
+
+const getOtp = async (email)=>{
+
+  try{  
+    // const user = await User.findOne({email});
+    // if(!user) {
+    //   throw new Error("User not registered");
+    // }
+    const otp = generateOtp(6);
+    let res = await Otp.findOne({email:email}) ;
+    if(!res)
+       res = await Otp.create({email : email , otp : otp});
+    else res = await Otp.findOneAndUpdate({email:email},{otp:otp},{new:true});
+    console.log(res) ;
+
+    const response = await mailsender.sendMail({
+                      from: process.env.GMAIL_EMAIL,
+                      to:email,
+                      subject:"Mail from chat-app",
+                      html:`The otp is ${otp}`
+                    })
+    return true ;
+
+  }catch(error){
+    console.log("error service " , error.message);
+    if(!error.message)
+      throw new Error("Something went wrong , Retry!!!");
+    throw new Error(error)
+  }
+}
+
+const verifyOtp = async (otp,email)=>{
+  try {
+    const response = await Otp.find({email:email}, 'otp');
+    console.log("response" , response);
+    if(!response){
+      throw new Error("Otp expired");
+    }
+    if(+otp === response[0].otp) return true ;
+    else 
+    throw new Error("Otp did not match") ;
+  } catch (error) {
+    if(!error.message)
+      throw new Error("Something went wrong , Retry!!!");
+    throw new Error(error.message)
+  }
+}
+
+module.exports = { 
+  allUsers,registerUser, 
+  authUser,getContacts,addToContacts,
+  getAll, getOtp,verifyOtp
+};

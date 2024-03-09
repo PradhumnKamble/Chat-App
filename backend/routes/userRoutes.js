@@ -15,4 +15,7 @@ router.route("/:id/contacts").patch(AuthMiddleware.protect,UserController.addToC
 router.route("/").post(AuthMiddleware.validateRegisterUser,UserController.registerUser);
 router.post("/login", UserController.authUser);
 
+router.get("/changePassword" , UserController.getOtp);
+router.post("/changePassword", UserController.verifyOtp);
+
 module.exports = router;

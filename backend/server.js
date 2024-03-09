@@ -1,13 +1,16 @@
 const express = require("express");
-const connectDB = require("./config/db");
+
 const dotenv = require("dotenv");
+dotenv.config(); // LOADS ENV vairables and  process.env gets user env variables 
+
+const mailsender = require("./config/email-config")
+const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const { ErrorMiddleware } = require("./middlewares");
 const path = require("path");
 
-dotenv.config(); // LOADS ENV vairables and  process.env gets user env variables 
 connectDB();
 const app = express();
 
@@ -28,7 +31,9 @@ const PORT = process.env.PORT;
 
 const server = app.listen(
   PORT,
-  console.log(`Server running on PORT ${PORT}...`)
+  ()=>{
+    console.log(`Server running on PORT ${PORT}...`)
+  }
 );
 let count = 0 ;
 const io = require("socket.io")(server, {

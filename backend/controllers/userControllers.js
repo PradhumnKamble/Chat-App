@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-
+const User = require("../models/userModel");
 const { UserService} = require("../services") ;
 
 // @description     Get or Search all users
@@ -86,7 +86,34 @@ const getAll = asyncHandler(async (req,res)=>{
     
   } catch(e) {
       res.status(500) ;
-      throw Error(e.message) ;
+      throw new Error(e.message) ;
   }
 })
-module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll};
+
+const getOtp = async (req,res)=>{
+  // console.log(req.user.email)
+  try {
+    const response = await UserService.getOtp("kacsdprta@gmail.com") ;
+    
+    return res.status(200).json({message:"Otp has been sent to your email",data:response}) ;
+    
+  } catch (error) {
+    res.status(500) ;
+    throw new Error(error) ;
+  }
+
+}
+const verifyOtp = async(req,res)=>{
+  console.log("req body ",req.body)
+  try {
+    const response = await UserService.verifyOtp(req.body.otp ,req.body.email);
+    if(response){
+      return res.status(200).json("Success") ;
+    }
+  } catch (error) {
+    res.status(500) ;
+    throw new Error(error.message) ;
+  }
+}
+
+module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll,verifyOtp,getOtp};
