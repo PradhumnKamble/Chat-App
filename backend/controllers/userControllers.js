@@ -91,9 +91,9 @@ const getAll = asyncHandler(async (req,res)=>{
 })
 
 const getOtp = async (req,res)=>{
-  // console.log(req.user.email)
+  console.log(req.body.email)
   try {
-    const response = await UserService.getOtp("kacsdprta@gmail.com") ;
+    const response = await UserService.getOtp(req.body.email) ;
     
     return res.status(200).json({message:"Otp has been sent to your email",data:response}) ;
     
@@ -104,7 +104,6 @@ const getOtp = async (req,res)=>{
 
 }
 const verifyOtp = async(req,res)=>{
-  console.log("req body ",req.body)
   try {
     const response = await UserService.verifyOtp(req.body.otp ,req.body.email);
     if(response){
@@ -116,4 +115,18 @@ const verifyOtp = async(req,res)=>{
   }
 }
 
-module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll,verifyOtp,getOtp};
+const changePassword = async(req,res)=>{
+  try {
+    const response = await UserService.changePassword(req.body.email ,req.body.newPassword);
+    if(response){
+      return res.status(200).json("Success") ;
+    }
+  } catch (error) {
+    res.status(500) ;
+    throw new Error(error.message) ;
+  }
+}
+
+module.exports = { allUsers,registerUser, authUser,getContacts,addToContacts,getAll,verifyOtp,getOtp , changePassword
+
+};

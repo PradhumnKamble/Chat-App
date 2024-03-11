@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const Otp = require("../models/otpModel");
 const generateToken = require("../config/generateToken");
 const mailsender = require("../config/email-config");
+const bcrypt = require("bcryptjs");
+
 
 // @description     Get or Search all users
 // @route           GET /api/user?search=
@@ -115,6 +117,19 @@ const authUser = asyncHandler(async (data) => {
   }
 });
 
+const changePassword = asyncHandler(async(email , password)=>{
+  try {
+    const salt = await bcrypt.genSalt(10);
+    encryptedPassword = await bcrypt.hash(password, salt);
+    const user = await User.findOneAndUpdate({email : email} , {password : encryptedPassword} ,{new:true});
+
+    console.log(user) ;
+    return true ;
+  } catch(e) {
+    console.log(e);
+    throw new Error(e) ;
+  }
+})
 const getAll = asyncHandler(async ()=>{
   try {
     const users = await User.find({},'_id name email') ; 
@@ -181,5 +196,5 @@ const verifyOtp = async (otp,email)=>{
 module.exports = { 
   allUsers,registerUser, 
   authUser,getContacts,addToContacts,
-  getAll, getOtp,verifyOtp
+  getAll, getOtp,verifyOtp ,changePassword
 };
