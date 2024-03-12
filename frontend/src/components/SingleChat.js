@@ -301,8 +301,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               >
               </Input>
             </FormControl> 
-            <span style={{cursor:"pointer"}} 
-            onClick={sendMessage}> <img src ={plane} width="50px"/> </span>
+            <Button _hover = {{backgroundColor :"gray" , color :"white"}} bg ="#414a4c"
+            color = "white"
+            onClick={sendMessage}>Send</Button>
            </Box>
           
           </Box>
