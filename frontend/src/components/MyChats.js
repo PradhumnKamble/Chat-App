@@ -24,7 +24,8 @@ const MyChats = ({ fetchAgain }) => {
 
     if(date.toLocaleDateString() === (new Date().toLocaleDateString())){
       let hours = date.getHours() ;
-      let minutes = date.getMinutes() ;
+      let minutes = date.getMinutes()  ;
+      minutes = minutes > 9 ? minutes : ('0'+minutes) ; 
       let amPm = hours >= 12 ? 'PM' : 'AM' ;
       let rem  = hours%12  ; // 12 hr format
       hours = (rem === 0) ? 12 : rem ;

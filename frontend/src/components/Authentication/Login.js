@@ -116,7 +116,7 @@ const Login = () => {
         isClosable: true,
         position: "top",
       });
-      
+      setOtp("");
       setOtpTab(false) ;
       setPasswordChangeTab(true) ;
       setVerifyOtpLoading(false);
@@ -170,6 +170,7 @@ const changePassword = async()=>{
         isClosable: true,
         position: "top",
       });
+      setNewPassword("");
       setLoginOpen(true) ;
       // setChangePassLoading(false);
       // setOtpTab(false) ;

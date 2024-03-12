@@ -1,4 +1,5 @@
 import { FormControl } from "@chakra-ui/form-control";
+import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
@@ -17,6 +18,7 @@ import plane from "../images/plane.svg"
 import io from "socket.io-client";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import { ChatState } from "../Context/ChatProvider";
+import EmojiPicker from 'emoji-picker-react';
 
 
 const ENDPOINT = "http://localhost:5000"
@@ -27,10 +29,11 @@ var socket, selectedChatCompare;
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [newMessage, setNewMessage] = useState("");
+  let [newMessage ,setNewMessage] = useState("") ;
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  const [emojiPickOpen, setEmojiPickOpen] = useState(false);
   const toast = useToast();
 
   const defaultOptions = {
@@ -149,20 +152,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     if (!socketConnected) return;
 
-    if (!typing) {
-      setTyping(true);
-      socket.emit("typing", selectedChat._id);
-    }
-    let lastTypingTime = new Date().getTime();
-    var timerLength = 3000;
-    setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timeDiff = timeNow - lastTypingTime;
-      if (timeDiff >= timerLength && typing) {
-        socket.emit("stop typing", selectedChat._id);
-        setTyping(false);
-      }
-    }, timerLength);
+    // if (!typing) {
+    //   setTyping(true);
+    //   socket.emit("typing", selectedChat._id);
+    // }
+    // let lastTypingTime = new Date().getTime();
+    // var timerLength = 3000;
+    // setTimeout(() => {
+    //   var timeNow = new Date().getTime();
+    //   var timeDiff = timeNow - lastTypingTime;
+    //   if (timeDiff >= timerLength && typing) {
+    //     socket.emit("stop typing", selectedChat._id);
+    //     setTyping(false);
+    //   }
+    // }, timerLength);
   };
 
   return (
@@ -225,7 +228,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             display="flex"
             flexDir="column"
             justifyContent="flex-end"
-            p={3}
+            p={2}
             // bg="#E8E8E8"
             w="100%"
             h="100%"
@@ -245,8 +248,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <ScrollableChat messages={messages} />
               </div>
             )}
-            <span style={{display:"flex"}}>
+            <Box display = {emojiPickOpen ?"flex": "none" }
+               alignItems ="center" flexDirection = "column">
+
+                <Box style = {{position : 'absolute' ,bottom : "10%" , right :"45%" , zIndex:999}}  >
+                  
+                    {/* <Button colorScheme = "telegram" onClick = {()=>{setEmojiPickOpen(!emojiPickOpen)}}> */}
+                    {/*   Close */}
+                    {/* </Button> */}
+                    <EmojiPicker
+                        open = {emojiPickOpen}
+                        width = "100%" 
+                        // style = {{position : "relative" , marginBottom : "10px"}}
+                        onEmojiClick = {(emojiObj)=>{ 
+                         setNewMessage(newMessage.concat(emojiObj.emoji)) ; 
+                      }}/>        
+                </Box>
+            </Box>
+            <Box display = "flex"  alignItems = "center">
+              <Box>
+                <Button colorScheme = "telegram" onClick = {()=>{setEmojiPickOpen(!emojiPickOpen)}}>
+                  <i class="fa-sharp fa-solid fa-face-smile  fa-xl"></i>
+                </Button>
+              </Box>
+              
             <FormControl
+              height = "100%"
               onKeyDown={sendMessage}
               id="first-name"
               isRequired
@@ -266,21 +293,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <></>
               )}
               <Input
-                variant="filled"
+                // variant="filled"
                 bg="white"
                 placeholder="Enter a message.."
                 value={newMessage}
                 onChange={typingHandler}
-        
-              />
-
-
-            </FormControl>
-            <span style={{padding:"5px 16px",width:"100px",cursor:"pointer"}} 
+              >
+              </Input>
+            </FormControl> 
+            <span style={{cursor:"pointer"}} 
             onClick={sendMessage}> <img src ={plane} width="50px"/> </span>
-
-
-            </span>
+           </Box>
+          
           </Box>
         </>
       ) : (
