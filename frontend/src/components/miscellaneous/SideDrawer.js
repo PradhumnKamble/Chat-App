@@ -75,7 +75,8 @@ function SideDrawer() {
 
   const history = useHistory();
 
-  const logoutHandler = () => {
+  const logoutHandler = async() => {
+    const { data } = await axios.patch(`/api/user/logout/${user._id}`);
     localStorage.removeItem("userInfo");
     history.push("/");
   };

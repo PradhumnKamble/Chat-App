@@ -4,7 +4,8 @@ import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
-import { getSender, getSenderFull } from "../config/ChatLogics";
+import { getSender, getSenderFull} from "../config/ChatLogics";
+import Status from "../config/Status.js";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
@@ -201,7 +202,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     position:'relative',
                     marginLeft :"5px"
                   }}>
-                  {getSender(user, selectedChat.users)}</Box>
+                  <span>
+                      {getSender(user, selectedChat.users)}  
+                  </span>
+                  <Status loggedUser = {user} users = {selectedChat.users}/>
+
+                  </Box>
+                  
                   <Box sx ={{
                     position:'relative',
                     marginRight :"0px"
