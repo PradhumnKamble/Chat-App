@@ -260,9 +260,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
                 <Box style = {{position : 'absolute' ,bottom : "10%" , right :"45%" , zIndex:999}}  >
                   
-                    {/* <Button colorScheme = "telegram" onClick = {()=>{setEmojiPickOpen(!emojiPickOpen)}}> */}
-                    {/*   Close */}
-                    {/* </Button> */}
+                    <Button colorScheme = "telegram" onClick = {()=>{setEmojiPickOpen(!emojiPickOpen)}}>
+                      Close
+                    </Button>
                     <EmojiPicker
                         open = {emojiPickOpen}
                         width = "100%" 
