@@ -14,7 +14,7 @@ import { useEffect,useState,Fragment } from "react";
 import { useHistory } from "react-router";
 import Login from "../components/Authentication/Login";
 import Signup from "../components/Authentication/Signup";
-import icon from '../images/icon.svg'
+import icon from '../images/icon2.svg'
 import onlineChat from '../images/onlineChat.svg'
 import chat from '../images/chat.svg'
 import "./Homepage2.css";
@@ -57,7 +57,7 @@ function Homepage2() {
    <navbar>
    <Box display="flex" alignItems="center">
     <img src={icon} style={{width:"10%"}} />
-   <Text fontWeight = "bold" fontSize="2em" color="white">Messenger</Text>
+   <Text fontWeight = "bold" fontSize="2em" color="white">ChatFast</Text>
    </Box>
   <Box display="flex" p ="0 5px">
 
@@ -107,7 +107,7 @@ function Homepage2() {
   <div class="content">
   
   <div class="text">
-  <Text color = "#354E4F" fontWeight = "bold" fontSize="3em">Connect,Grow and Inspire</Text>
+  <Text color = "#354E4F" fontWeight = "bold" fontSize="3em">Connect, Grow and Inspire</Text>
   <Text fontWeight = "bold"> Stay connected with people and interact with them easily</Text>
   </div>
   <div style={{width:"50%",height:"50%"}}>

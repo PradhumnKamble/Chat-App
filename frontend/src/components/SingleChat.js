@@ -251,7 +251,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 margin="auto"
               />
             ) : (
-              <div className="messages">
+              <div className="messages" >
                 <ScrollableChat messages={messages} />
               </div>
             )}
@@ -284,7 +284,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               onKeyDown={sendMessage}
               id="first-name"
               isRequired
-              mt={2}
+              
 
             >
               {istyping ? (
@@ -300,7 +300,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <></>
               )}
               <Input
-                // variant="filled"
+                height ="100%"
                 bg="white"
                 placeholder="Enter a message.."
                 value={newMessage}
@@ -308,9 +308,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               >
               </Input>
             </FormControl> 
-            <Button _hover = {{backgroundColor :"gray" , color :"white"}} bg ="#414a4c"
-            color = "white"
-            onClick={sendMessage}>Send</Button>
+            <div width ="100%">
+              
+            <button class = "button-37" onClick={sendMessage}>Send</button>
+            </div>
            </Box>
           
           </Box>

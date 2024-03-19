@@ -1,5 +1,5 @@
 import "./App.css";
-import Homepage from "./Pages/Homepage2";
+import Homepage from "./Pages/Homepage";
 import { Route,BrowserRouter as Router,Switch } from "react-router-dom";
 import Chatpage from "./Pages/Chatpage";
 

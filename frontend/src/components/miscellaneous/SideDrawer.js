@@ -39,7 +39,7 @@ import { ChatState } from "../../Context/ChatProvider";
 import MyChats from "../MyChats";
 import {useEffect} from 'react'
 
-import icon from '../../images/icon.svg'
+import icon from '../../images/icon2.svg'
  
 function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -179,11 +179,11 @@ function SideDrawer() {
         alignItems="center"
         bg="#FDFDFD"
         w="100%"
-        p="5px 10px 5px 10px"
+        // p="5px 10px 5px 10px"
         style={{'border-bottom':"1px solid whitesmoke"}}
       >
-        <Box w="20%" display="flex"><img src={icon} style={{width:"40%"}} />
-        <Text fontSize="1.8rem" fontWeight="bold">Messenger
+        <Box w="20%" display="flex" alignItems="center"><img src={icon} style={{width:"35%"}} />
+        <Text fontSize="1.8rem" fontWeight="bold">ChatFast
         </Text></Box>
 
         <div>
